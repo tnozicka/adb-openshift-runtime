@@ -12,7 +12,7 @@ IMAGE_TAG="latest"
 
 # The public IP address the VM created by Vagrant will get.
 # You will use this IP address to connect to OpenShift web console.
-PUBLIC_ADDRESS="10.1.2.20"
+PUBLIC_ADDRESS="10.1.2.2"
 
 REQUIRED_PLUGINS = %w(vagrant-service-manager vagrant-sshfs)
 errors = []
@@ -38,15 +38,15 @@ Vagrant.configure(2) do |config|
   config.vm.box = 'projectatomic/adb'
 
   config.vm.provider "virtualbox" do |v, override|
-    v.memory = 3072
-    v.cpus   = 2
-    v.customize ["modifyvm", :id, "--cpus", "2"]
+    v.memory = 4096
+    v.cpus   = 4
+    v.customize ["modifyvm", :id, "--cpus", "4"]
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
   end
 
   config.vm.provider "libvirt" do |v, override|
     v.driver = "kvm"
-    v.memory = 3072
+    v.memory = 4096
     v.cpus   = 4
   end
 
@@ -72,7 +72,10 @@ Vagrant.configure(2) do |config|
   config.vm.network "private_network", ip: "#{PUBLIC_ADDRESS}"
 
   config.vm.provision "shell", run: "always", inline: <<-SHELL
-    sudo yum install -y http://cbs.centos.org/kojifiles/work/tasks/6033/96033/adb-utils-1.8-1.el7.noarch.rpm 1>/dev/null
+    sudo yum update -y --nogpgcheck adb-utils 1>/dev/null
+    sudo curl -s -L https://github.com/openshift/origin/raw/master/examples/jenkins/pipeline/jenkinstemplate.json > /opt/adb/openshift/templates/adb/jenkins-template.json  # TODO: replace this with one having persistent storage 
+    sudo sed -i 's/"value": "512Mi"/"value": "700Mi"/' /opt/adb/openshift/templates/adb/jenkins-template.json  # This should prevent Jenkins restarts while initializing
+    sudo curl -s -L https://github.com/redhat-kontinuity/catapult/raw/master/catapult_os_template.json > /opt/adb/openshift/templates/adb/catapult-template.json
     sudo DOCKER_REGISTRY=#{DOCKER_REGISTRY} IMAGE_TAG=#{IMAGE_TAG} IMAGE_NAME=#{IMAGE_NAME} /usr/bin/sccli openshift
   SHELL
 
@@ -87,6 +90,8 @@ Vagrant.configure(2) do |config|
   SHELL
 
   config.vm.provision "shell", run: "always", privileged: false, inline: <<-SHELL
+    oc delete project sample-project 1>/dev/null 2>&1
+    oc new-project catapult --display-name="Catapult" 1>/dev/null
 
     echo "You can now access OpenShift console on: https://#{PUBLIC_ADDRESS}:8443/console"
     echo
@@ -96,7 +101,7 @@ Vagrant.configure(2) do |config|
     echo
     echo "To use OpenShift CLI, run:"
     echo "$ vagrant ssh"
-    echo "$ oc login"
+    echo "$ oc ..."
     echo
     echo "To browse the OpenShift API documentation, follow this link:"
     echo "http://openshift3swagger-claytondev.rhcloud.com"
