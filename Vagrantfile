@@ -38,7 +38,7 @@ Vagrant.configure(2) do |config|
   config.vm.box = 'projectatomic/adb'
 
   config.vm.provider "virtualbox" do |v, override|
-    v.memory = 4096
+    v.memory = 5120
     v.cpus   = 4
     v.customize ["modifyvm", :id, "--cpus", "4"]
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
@@ -46,7 +46,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.provider "libvirt" do |v, override|
     v.driver = "kvm"
-    v.memory = 4096
+    v.memory = 5120
     v.cpus   = 4
   end
 
