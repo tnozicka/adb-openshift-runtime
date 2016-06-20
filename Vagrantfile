@@ -75,9 +75,12 @@ Vagrant.configure(2) do |config|
 #    sudo yum update -y --nogpgcheck adb-utils 1>/dev/null
     sudo yum install -y http://cbs.centos.org/kojifiles/work/tasks/7131/97131/adb-utils-1.8.1-1.el7.noarch.rpm 1>/dev/null
     sudo sed -i.orig -e "s/METRICS=false/METRICS=true/" /etc/sysconfig/openshift_option
-    sudo curl -s -L https://github.com/openshift/origin/raw/master/examples/jenkins/pipeline/jenkinstemplate.json > /opt/adb/openshift/templates/adb/jenkins-template.json  # TODO: replace this with one having persistent storage 
-    sudo sed -i 's/"value": "512Mi"/"value": "700Mi"/' /opt/adb/openshift/templates/adb/jenkins-template.json  # This should prevent Jenkins restarts while initializing
+
+    sudo curl -s -L https://github.com/tnozicka/adb-utils/raw/update-jenkins-next-templates/services/openshift/templates/adb/jenkins-persistent-next-template.json > /opt/adb/openshift/templates/adb/jenkins-persistent-template.json
+    sudo sed 's/"name": "jenkins-persistent-next"/"name": "jenkins"/' /opt/adb/openshift/templates/adb/jenkins-persistent-template.json > /opt/adb/openshift/templates/adb/jenkins-template.json
+
     sudo curl -s -L https://github.com/redhat-kontinuity/catapult/raw/master/catapult_os_template.json > /opt/adb/openshift/templates/adb/catapult-template.json
+
     sudo DOCKER_REGISTRY=#{DOCKER_REGISTRY} IMAGE_TAG=#{IMAGE_TAG} IMAGE_NAME=#{IMAGE_NAME} /usr/bin/sccli openshift
   SHELL
 
