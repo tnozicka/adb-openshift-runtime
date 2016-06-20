@@ -72,7 +72,9 @@ Vagrant.configure(2) do |config|
   config.vm.network "private_network", ip: "#{PUBLIC_ADDRESS}"
 
   config.vm.provision "shell", run: "always", inline: <<-SHELL
-    sudo yum update -y --nogpgcheck adb-utils 1>/dev/null
+#    sudo yum update -y --nogpgcheck adb-utils 1>/dev/null
+    sudo yum install -y http://cbs.centos.org/kojifiles/work/tasks/7131/97131/adb-utils-1.8.1-1.el7.noarch.rpm 1>/dev/null
+    sudo sed -i.orig -e "s/METRICS=false/METRICS=true/" /etc/sysconfig/openshift_option
     sudo curl -s -L https://github.com/openshift/origin/raw/master/examples/jenkins/pipeline/jenkinstemplate.json > /opt/adb/openshift/templates/adb/jenkins-template.json  # TODO: replace this with one having persistent storage 
     sudo sed -i 's/"value": "512Mi"/"value": "700Mi"/' /opt/adb/openshift/templates/adb/jenkins-template.json  # This should prevent Jenkins restarts while initializing
     sudo curl -s -L https://github.com/redhat-kontinuity/catapult/raw/master/catapult_os_template.json > /opt/adb/openshift/templates/adb/catapult-template.json
@@ -93,6 +95,8 @@ Vagrant.configure(2) do |config|
     oc delete project sample-project 1>/dev/null 2>&1
     oc new-project catapult --display-name="Catapult" 1>/dev/null
 
+    echo "Please visit https://hawcular-metrics.centos7-adb.#{PUBLIC_ADDRESS}.xip.io/ (or any other https site inside cluster) and accept the ssl certificate for the metrics to work in console."
+    echo
     echo "You can now access OpenShift console on: https://#{PUBLIC_ADDRESS}:8443/console"
     echo
     echo "Configured basic user: openshift-dev, Password: devel"
