@@ -76,8 +76,8 @@ Vagrant.configure(2) do |config|
     sudo yum install -y http://cbs.centos.org/kojifiles/work/tasks/7131/97131/adb-utils-1.8.1-1.el7.noarch.rpm 1>/dev/null
     sudo sed -i.orig -e "s/METRICS=false/METRICS=true/" /etc/sysconfig/openshift_option
 
-    sudo curl -s -L https://github.com/tnozicka/adb-utils/raw/update-jenkins-next-templates/services/openshift/templates/adb/jenkins-persistent-next-template.json > /opt/adb/openshift/templates/adb/jenkins-persistent-template.json
-    sudo sed 's/"name": "jenkins-persistent-next"/"name": "jenkins"/' /opt/adb/openshift/templates/adb/jenkins-persistent-template.json > /opt/adb/openshift/templates/adb/jenkins-template.json
+    sudo curl -s -L https://github.com/tnozicka/adb-utils/raw/update-jenkins-next-templates/services/openshift/templates/adb/jenkins-ephemeral-next-template.json > /opt/adb/openshift/templates/adb/jenkins-ephemeral-template.json
+    sudo sed 's/"name": "jenkins-ephemeral-next"/"name": "jenkins"/' /opt/adb/openshift/templates/adb/jenkins-ephemeral-template.json > /opt/adb/openshift/templates/adb/jenkins-template.json
 
     sudo curl -s -L https://github.com/redhat-kontinuity/catapult/raw/master/catapult_os_template.json > /opt/adb/openshift/templates/adb/catapult-template.json
 
