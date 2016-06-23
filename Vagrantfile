@@ -14,7 +14,7 @@ IMAGE_TAG="latest"
 # You will use this IP address to connect to OpenShift web console.
 PUBLIC_ADDRESS="10.1.2.2"
 
-REQUIRED_PLUGINS = %w(vagrant-service-manager vagrant-sshfs)
+REQUIRED_PLUGINS = %w(vagrant-service-manager)
 errors = []
 
 def message(name)
@@ -84,12 +84,6 @@ Vagrant.configure(2) do |config|
     sudo DOCKER_REGISTRY=#{DOCKER_REGISTRY} IMAGE_TAG=#{IMAGE_TAG} IMAGE_NAME=#{IMAGE_NAME} /usr/bin/sccli openshift
   SHELL
 
-  if Vagrant::Util::Platform.windows?
-    target_path = ENV['USERPROFILE'].gsub(/\\/,'/').gsub(/[[:alpha:]]{1}:/){|s|'/' + s.downcase.sub(':', '')}
-    config.vm.synced_folder ENV['USERPROFILE'], target_path, type: 'sshfs', sshfs_opts_append: '-o umask=000 -o uid=1000 -o gid=1000'
-  else
-    config.vm.synced_folder ENV['HOME'], ENV['HOME'], type: 'sshfs', sshfs_opts_append: '-o umask=000 -o uid=1000 -o gid=1000'
-  end
   config.vm.provision "shell", inline: <<-SHELL
     sudo setsebool -P virt_sandbox_use_fusefs 1
   SHELL
