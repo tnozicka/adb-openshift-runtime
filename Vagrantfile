@@ -8,7 +8,7 @@ DOCKER_REGISTRY="docker.io"
 IMAGE_NAME="openshift/origin"
 # Tag of the OpenShift image available on dockerhub.
 #IMAGE_TAG="v1.2.0"
-IMAGE_TAG="v1.3.0-alpha.2"
+IMAGE_TAG="latest"
 
 # The public IP address the VM created by Vagrant will get.
 # You will use this IP address to connect to OpenShift web console.
