@@ -113,7 +113,7 @@ Vagrant.configure(2) do |config|
     echo
     echo "We will now pull some builder images to make your experience smoother for the first time."
     docker pull docker.io/redhatdevelopers/catapult
-    docker pull docker.io/openshift/jenkins-1-centos7:dev
+    docker pull docker.io/openshift/jenkins-1-centos7@sha256:cf2fd64626805b390561acb9220951dc46a207e70ba7b7ed027439ac721f1e92
     docker pull docker.io/redhatdistortion/maven-jenkins-slave
     docker pull registry.access.redhat.com/jboss-eap-7/eap70-openshift
     echo "Done pulling images"
