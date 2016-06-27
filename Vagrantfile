@@ -116,6 +116,7 @@ Vagrant.configure(2) do |config|
     docker pull docker.io/openshift/jenkins-1-centos7@sha256:cf2fd64626805b390561acb9220951dc46a207e70ba7b7ed027439ac721f1e92
     docker pull docker.io/redhatdistortion/maven-jenkins-slave
     docker pull registry.access.redhat.com/jboss-eap-7/eap70-openshift
+    docker pull registry.access.redhat.com/openshift3/nodejs-010-rhel7
     echo "Done pulling images"
   SHELL
 end
