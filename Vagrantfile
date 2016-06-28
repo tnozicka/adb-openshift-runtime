@@ -117,6 +117,7 @@ Vagrant.configure(2) do |config|
     docker pull docker.io/redhatdistortion/maven-jenkins-slave
     docker pull registry.access.redhat.com/jboss-eap-7/eap70-openshift
     docker pull registry.access.redhat.com/openshift3/nodejs-010-rhel7
+    docker pull registry.access.redhat.com/rhscl/mongodb-26-rhel7
     echo "Done pulling images"
   SHELL
 end
